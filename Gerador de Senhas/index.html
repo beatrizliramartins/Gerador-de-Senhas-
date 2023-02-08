@@ -11,8 +11,8 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="reset.css" />
-    <link rel="stylesheet" href="Style.css" />
-    <title>Gerador de Senhas </title>
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
   </head>
   <body>
     <main>
@@ -38,7 +38,7 @@
           </div>
         </div>
         <div class="security-indicator">
-          <div id="security-indicator-bar" class="bar" style="width: 90%"></div>
+          <div id="security-indicator-bar" class="bar"></div>
         </div>
       </section>
 
@@ -86,6 +86,9 @@
       const upperCaseCheckEl = document.querySelector("#uppercase-check")
       const numberCheckEl = document.querySelector("#number-check")
       const symbolCheckEl = document.querySelector("#symbol-check")
+      const securityIndicatorBarEl = document.querySelector(
+        "#security-indicator-bar"
+      )
 
       let passwordLength = 16
 
@@ -116,6 +119,46 @@
         }
 
         inputEl.value = password
+
+        calculateQuality()
+      }
+
+      function calculateQuality() {
+        // T*0.25 + M*0.15 + N*0.25 + S*0.35 = 100
+
+        const percent = Math.round(
+          (passwordLength / 64) * 25 +
+            (upperCaseCheckEl.checked ? 15 : 0) +
+            (numberCheckEl.checked ? 25 : 0) +
+            (symbolCheckEl.checked ? 35 : 0)
+        )
+
+        if(percent > 69 ){
+          // safe
+          securityIndicatorBarEl.classList.remove("critical")
+          securityIndicatorBarEl.classList.remove("warning")
+          securityIndicatorBarEl.classList.add("safe")
+        }else if (percent > 50){
+          // warning
+          securityIndicatorBarEl.classList.remove("critical")
+          securityIndicatorBarEl.classList.add("warning")
+          securityIndicatorBarEl.classList.remone("safe")
+        }else {
+          // critical
+          securityIndicatorBarEl.classList.add("critical")
+          securityIndicatorBarEl.classList.remove("warning")
+          securityIndicatorBarEl.classList.remove("safe")
+        }
+
+        if(percent >= 100){
+          securityIndicatorBarEl.classList.add("completed")
+
+        }else {
+          securityIndicatorBarEl.classList.remove("completed")
+        }
+       
+
+        securityIndicatorBarEl.style.width = `${percent}%`
       }
 
       function copy() {
@@ -125,7 +168,7 @@
       const passwordLengthEl = document.querySelector("#password-length")
       passwordLengthEl.addEventListener("input", function () {
         passwordLength = passwordLengthEl.value
-        document.querySelector("#password-length-text").innerText = 
+        document.querySelector("#password-length-text").innerText =
           passwordLength
         generatePassword()
       })
