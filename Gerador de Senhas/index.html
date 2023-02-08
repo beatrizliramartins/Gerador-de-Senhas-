@@ -11,8 +11,8 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="reset.css" />
-    <link rel="stylesheet" href="style.css" />
-    <title>Document</title>
+    <link rel="stylesheet" href="Style.css" />
+    <title>Gerador de Senhas </title>
   </head>
   <body>
     <main>
@@ -76,19 +76,37 @@
           </div>
         </div>
       </section>
-      
+
       <div class="submit">
-      <button id="copy-2">Copiar senha</button>
-    </div>
+        <button id="copy-2">Copiar senha</button>
+      </div>
     </main>
     <script>
       const inputEl = document.querySelector("#password")
+      const upperCaseCheckEl = document.querySelector("#uppercase-check")
+      const numberCheckEl = document.querySelector("#number-check")
+      const symbolCheckEl = document.querySelector("#symbol-check")
 
       let passwordLength = 16
 
       function generatePassword() {
-        const chars =
-          "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789?!@&*()[]"
+        let chars = "abcdefghjkmnpqrstuvwxyz"
+
+        const upperCaseChars = "ABCDEFGHJKLMNPQRSTUVWXYZ"
+        const numberChars = "123456789"
+        const symbolChars = "?!@&*()[]"
+
+        if (upperCaseCheckEl.checked) {
+          chars += upperCaseChars
+        }
+
+        if (numberCheckEl.checked) {
+          chars += numberChars
+        }
+
+        if (symbolCheckEl.checked) {
+          chars += symbolChars
+        }
 
         let password = ""
 
@@ -109,6 +127,9 @@
         passwordLength = passwordLengthEl.value
         generatePassword()
       })
+      upperCaseCheckEl.addEventListener("click", generatePassword)
+      numberCheckEl.addEventListener("click", generatePassword)
+      symbolCheckEl.addEventListener("click", generatePassword)
 
       document.querySelector("#copy-1").addEventListener("click", copy)
       document.querySelector("#copy-2").addEventListener("click", copy)
